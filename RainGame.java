@@ -1,0 +1,187 @@
+/**
+ * @author yelixu2, luo35 
+ * @reviewed behymer2, mfb2
+ */
+public class RainGame {
+
+	public static void main(String[] args) {
+		// To get points type your netids above (CORRECTLY-Please double check your partner correctly spells your netid correctly!!)
+		// Your netid is the unique part of your @illinois email address
+		// Do not put your name or your UIN. 
+		// REMEMBER TO COMMIT this file...
+	
+		
+		int x=0, y=0, dx=0, dy=0, score = 0, level=0;
+		String text = "";
+		int xxx=0, yyy=0;
+		String nm="";
+		
+		int xx=Zen.getZenWidth();
+		int yy=0;
+		//int yy=Zen.getZenHeight() / 2 + (int) (Math.random() * 170);
+		
+		long startTime =System.currentTimeMillis();
+		
+		while (Zen.isRunning()) {
+			
+			Zen.flipBuffer();   // remove flickering
+			
+			if (text.length() == 0) {
+				x = 0;
+				y = Zen.getZenHeight() / 2 + (int) (Math.random() * 170);
+				//y = Zen.getZenHeight() / 2;
+				dx = 2 + level;
+				//dx = 2;
+				dy = 0;
+				
+				xx=Zen.getZenWidth();
+				yy=Zen.getZenHeight() / 2 + (int) (Math.random() * 170);
+				xxx=Zen.getZenWidth()/2+(int) (Math.random() * 40);
+				yyy=Zen.getZenHeight() / 2 + (int) (Math.random() * 170);
+				
+				
+				nm= ""+(int) (Math.random() * 999);
+				
+				text = "" + (int) (Math.random() * 999);
+				long elapsed = System.currentTimeMillis() - startTime;
+				startTime = System.currentTimeMillis();
+				//score += 3000 / elapsed;
+			}
+			
+			
+			
+			
+			
+			
+			if(level<7){ 
+				if (level>=0&&level<2)
+				Zen.setColor(240,255,240);
+				Zen.fillRect(0, 0, Zen.getZenWidth(), Zen.getZenHeight());
+
+				Zen.setColor(176,196,222);Zen.drawText(text, x, y);  
+			    if (level>1&&level<4){
+					Zen.setColor(255,228,225);
+					Zen.fillRect(0, 0, Zen.getZenWidth(), Zen.getZenHeight());
+					
+					Zen.setColor(169,169,169);
+					Zen.drawText(text, x, y);
+					
+				}
+				
+			    if (level>3&&level<6){
+					Zen.setColor(230,230,250);
+					Zen.fillRect(0, 0, Zen.getZenWidth(), Zen.getZenHeight());
+					
+					Zen.setColor(169,169,169);
+					Zen.drawText(text, x, y);
+				
+				
+				}
+				
+				if (level>5){
+					Zen.setColor(255,248,220);
+					Zen.fillRect(0, 0, Zen.getZenWidth(), Zen.getZenHeight());
+					
+					Zen.setColor(169,169,169);
+					Zen.drawText(text, x, y);
+				}
+				
+				
+			
+			if (level>2 && level <7){
+				Zen.setColor(127,255,212);
+				Zen.setFont("Arial-35");
+				Zen.drawText("_(:з」∠)_", xx, yy);
+				
+				Zen.setColor(169,169,169);
+				
+				Zen.setFont("Arial-44");
+				Zen.setColor(139,0,139);
+				Zen.drawText(nm, xxx, yyy);
+				
+				Zen.setFont("Arial-55");
+				Zen.setColor(169,169,169);
+				
+			}
+				
+				
+				
+				
+			Zen.setFont("Times-28");
+			Zen.drawText("Press space to go to next level", 10,150);
+			Zen.drawText("Press q to exist", 10, 180);
+			
+			Zen.setFont("Arial-44");
+			Zen.drawText("Level: "+level, 10,50);
+			Zen.drawText("Score: "+score, 10,110);
+			
+			Zen.setFont("Arial-55");
+			
+			} //end of if (level<7)
+			else if(level==7){
+				
+				Zen.drawImage("ccccc.png", 0, 0, Zen.getZenWidth(), Zen.getZenHeight());
+				Zen.setColor(0,5,0);
+				Zen.setFont("Arial-44");
+				Zen.drawText("Congraduations!", 300, 250);
+				Zen.drawText("Score: "+score, 330,290);
+				Zen.setFont("Arial-30");
+				Zen.drawText("Press r to restart", 10, 450);
+				String user = Zen.getEditText();
+				Zen.setEditText("");
+				if (user.equals("r")) 
+				{score=0;
+				x=0;
+				dx=2;}
+				int max=Zen.getZenWidth();
+				if (x==max) x=0;
+			}//the success state
+			else{
+				Zen.drawImage("fail.png", 0, 0, Zen.getZenWidth(), Zen.getZenHeight());
+				Zen.setFont("Arial-35");
+				Zen.drawText("Press r to restart", 300, 50);
+				
+			
+			}//the fail state
+			x += dx;
+			y += dy;
+			
+			xx-=dx;
+			
+			// Find out what keys the user has been pressing.
+			String user = Zen.getEditText();
+			
+			// Reset the keyboard input to an empty string
+			// So next iteration we will only get the most recently pressed keys.
+			Zen.setEditText("");
+			
+			
+			
+			
+			for(int i=0;i < user.length();i++) {
+				char c = user.charAt(i);
+				if(c == text.charAt(0))
+					text = text.substring(1,text.length()); // all except first character
+			}
+			if (user.equals("r")) 
+				{score=0;
+				dx=0;
+				text="";}
+			else if (user.equals("q"))
+				score=40;
+			else if (user.equals(" "))
+				{score=5*(level+1); text="";}
+			else if (text.length()==0)
+				score+=1;
+			level=score/5;     // get 5 points, move to a higher level. set to larger number later
+			int max=Zen.getZenWidth();
+			int min=0;
+			if (x>=max) x=0;
+			if (xx<=min) xx=Zen.getZenWidth();
+			Zen.sleep(90-level*5);// sleep for 90 milliseconds (I made it sleep shorter time as level goes up)
+
+		} // while loop ends
+	
+	}
+
+}
